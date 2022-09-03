@@ -1,0 +1,13 @@
+---
+- name: Debian | Install Packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - snmpd
+
+- name: RedHat | Enable SNMP Daeomn Service
+  service:
+    name: snmpd
+    state: started
+    enabled: yes

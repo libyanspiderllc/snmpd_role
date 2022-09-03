@@ -1,0 +1,13 @@
+---
+- name: RedHat | Install Packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - net-snmp
+
+- name: RedHat | Enable SNMP Daeomn Service
+  service:
+    name: snmpd
+    state: started
+    enabled: yes

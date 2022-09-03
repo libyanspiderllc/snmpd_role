@@ -1,0 +1,27 @@
+---
+- name: Windows | Upload net-snmp Installer package
+  win_copy:
+    src: net-snmp-5.5.0-2.x64.exe
+    dest: C:\Users\{{ ansible_user }}\Downloads\net-snmp-5.5.0-2.x64.exe
+
+- name: Windows | Install net-snmp
+  win_package:
+    path: C:\Users\{{ ansible_user }}\Downloads\net-snmp-5.5.0-2.x64.exe
+    state: present
+    product_id: 'Net-SNMP'
+    arguments: /S
+    wait_for_children: true
+
+- name: Windows | Copy snmpd config file
+  win_copy:
+    src: snmpd.conf
+    dest: C:\usr\etc\snmp\snmpd.conf
+
+- name: Windows | Register NetSNMP Agent as a Service
+  win_shell: C:\usr\bin\snmpd.exe -register -quiet -Lf "C:/usr/log/snmpd.log"
+  ignore_errors: yes
+
+- name: Windows | Start Net-SNMP Service
+  win_service:
+    name: Net-SNMP Agent
+    state: started
